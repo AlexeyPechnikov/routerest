@@ -12,9 +12,9 @@
         "application/json"
     ],
     "paths": {
-        "get": {
+        "": {
             "post": {
-                "summary": "Get job from processing",
+                "summary": "Build route",
                 "description": "This request sends JSON route parameters and addresses and returns JSON route",
                 "responses": {
                     "200": {
@@ -34,7 +34,10 @@
                         "description": "Route processing",
                         "required": true,
                         "schema": {
+                            "type": "array",
+                            "items": {
                                 "$ref": "#/definitions/request"
+                            }
                         }
                     }
                 ]
@@ -347,12 +350,6 @@
                         }
                     }
                 }
-            }
-        },
-        "request":{
-            "type": "array",
-            "items": {
-                "type": "string"
             }
         }
     },
