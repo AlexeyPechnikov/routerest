@@ -1,0 +1,4 @@
+#!/bin/sh
+set -e
+
+echo "Don't forget to delete 'pm2': sudo npm -g remove pm2"

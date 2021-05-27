@@ -1,0 +1,8 @@
+Package: routerest
+Version: 0.0.1
+Architecture: all
+Maintainer: Alexey Pechnikov <pechnikov@mobigroup.ru>
+Depends: init-system-helpers, nodejs, npm
+Section: web
+Priority: optional
+Description: The backend for RouteREST project

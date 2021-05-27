@@ -1,0 +1,364 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "RouteRest-api",
+        "description": "The API for the RouteREST project"
+    },
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "get": {
+            "post": {
+                "summary": "Get job from processing",
+                "description": "This request sends JSON route parameters and addresses and returns JSON route",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                                "$ref": "#/definitions/response"
+                        }
+                    },
+                    "500":{
+                        "description": "Error"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "job",
+                        "in": "body",
+                        "description": "Route processing",
+                        "required": true,
+                        "schema": {
+                                "$ref": "#/definitions/request"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "request":{
+            "required": [
+                "jobid",
+                "options",
+                "addresses"
+            ],
+            "properties": {
+                "jobid": {
+                    "type": "string",
+                    "description": "Unique job identifier"
+                },
+                "options": {
+                    "required": [
+                        "vehicle",
+                        "endpoint",
+                        "optimize",
+                        "roundtrip",
+                        "startpoint",
+                        "vehicleprofile",
+                        "tolerance",
+                        "debug"
+                    ],
+                    "properties": {
+                        "vehicle": {
+                            "type": "string",
+                            "enum": ["Car", "Bike", "Pedestrian"],
+                            "example": "Car",
+                            "description": "Define route vehicle type. Car routing can't use pedestrian roads and pedestrian route can't use highways"
+                        },
+                        "endpoint": {
+                            "type": "boolean",
+                            "description": "Use True to set the last address as end route point"
+                        },
+                        "optimize": {
+                            "type": "boolean",
+                            "description": "Use True to reorder the addresses and False to save the order"
+                        },
+                        "roundtrip": {
+                            "type": "boolean",
+                            "description": "Use True for roundrip route and False otherwise"
+                        },
+                        "startpoint": {
+                            "type": "boolean",
+                            "description": "Use True to set the first address as start route point"
+                        },
+                        "vehicleprofile": {
+                            "type": "string",
+                            "enum": ["Car", "Car no oneways", "Bike", "Bike no oneways", "Pedestrian", "Auto"],
+                            "example": "Car",
+                            "description": "Define route vehicle profile. Auto means defalt one for the defined vehicle"
+                        },
+                        "streettypes": {
+                            "type": "string",
+                            "example": "*",
+                            "description": "Add more roads when OSM road types different from common ones. Use * to allow all road types."
+                        },
+                        "tolerance": {
+                            "type": "number",
+                            "example": 10.0,
+                            "description": "Allowed distance between defined coordinates and the nearest OSM roads"
+                        },
+                        "turn_cost": {
+                            "type": "boolean",
+                            "example": true,
+                            "description": "Cost in meters for lane-turns (negative value means default cost 10m for vehicle and 100m for pedestrian)"
+                        },
+                        "debug": {
+                            "type": "boolean",
+                            "description": "Produce additional geometries output to map the results"
+                        }
+                    },
+                    "type": "object"
+                },
+                "addresses": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "lat",
+                            "lon",
+                            "description"
+                        ],
+                        "properties": {
+                            "lat": {
+                                "type": "number",
+                                "description": "Latitude coordinate to match the address to OSM roads"
+                            },
+                            "lon": {
+                                "type": "number",
+                                "description": "Longitude coordinate to match the address to OSM roads"
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "Any string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "response":{
+            "required": [
+                "status",
+                "message"
+            ],
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "example": "ok"
+                },
+                "message": {
+                    "type": "string",
+                    "example": ""
+                },
+                "jobs": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "info": {
+                                "required": [
+                                    "length",
+                                    "addresses",
+                                    "lengthvehicle",
+                                    "lengthpedestrian",
+                                    "lengthhouse",
+                                    "route",
+                                    "routevehicle",
+                                    "routepedestrian",
+                                    "routehouse"
+                                ],
+                                "properties": {
+                                    "length": {
+                                        "type": "number",
+                                        "example": 1
+                                    },
+                                    "addresses": {
+                                        "type": "number",
+                                        "example": 1
+                                    },
+                                    "lengthvehicle": {
+                                        "type": "number",
+                                        "example": 1
+                                    },
+                                    "lengthpedestrian": {
+                                        "type": "number",
+                                        "example": 1
+                                    },
+                                    "lengthhouse": {
+                                        "type": "number",
+                                        "example": 1
+                                    },
+                                    "route": {
+                                        "type": "string",
+                                        "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))",
+                                        "description": "The entire route geometry"
+                                    },
+                                    "routevehicle": {
+                                        "type": "string",
+                                        "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))",
+                                        "description": "The route geometries on no-pedestrian roads only"
+                                    },
+                                    "routepedestrian": {
+                                        "type": "string",
+                                        "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))",
+                                        "description": "The route geometries on pedestrian roads only"
+                                    },
+                                    "routehouse": {
+                                        "type": "string",
+                                        "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))",
+                                        "description": "The route geometries on house connection segments only"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "jobid": {
+                                "type": "string",
+                                "example": "f88147d4"
+                            },
+                            "options": {
+                                "required": [
+                                    "vehicle",
+                                    "endpoint",
+                                    "optimize",
+                                    "roundtrip",
+                                    "startpoint",
+                                    "vehicleprofile",
+                                    "tolerance",
+                                    "debug"
+                                ],
+                                "properties": {
+                                    "vehicle": {
+                                        "type": "string",
+                                        "enum": ["Car", "Car no oneways", "Bike", "Bike no oneways", "Pedestrian"],
+                                        "description": "Copy of the same request field value"
+                                    },
+                                    "endpoint": {
+                                        "type": "boolean",
+                                        "description": "Copy of the same request field value"
+                                    },
+                                    "optimize": {
+                                        "type": "boolean",
+                                        "description": "Copy of the same request field value"
+                                    },
+                                    "roundtrip": {
+                                        "type": "boolean",
+                                        "description": "Copy of the same request field value"
+                                    },
+                                    "startpoint": {
+                                        "type": "boolean",
+                                        "description": "Copy of the same request field value"
+                                    },
+                                    "vehicleprofile": {
+                                        "type": "string",
+                                        "enum": ["Car", "Car no oneways", "Bike", "Bike no oneways", "Pedestrian", "Auto"],
+                                        "description": "Copy of the same request field value"
+                                    },
+                                    "streettypes": {
+                                        "type": "string",
+                                        "description": "Copy of the same request field value"
+                                    },
+                                    "tolerance": {
+                                        "type": "number",
+                                        "description": "Copy of the same request field value"
+                                    },
+                                    "turn_cost": {
+                                        "type": "boolean",
+                                        "description": "Copy of the same request field value"
+                                    },
+                                    "debug": {
+                                        "type": "boolean",
+                                        "description": "Copy of the same request field value"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "addresses": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "required": [
+                                        "lat",
+                                        "lon",
+                                        "country",
+                                        "description",
+                                        "point",
+                                        "route",
+                                        "routevehicle",
+                                        "routepedestrian",
+                                        "sequence",
+                                        "tolerance",
+                                        "status",
+                                        "statusinfo"
+                                    ],
+                                    "properties": {
+                                        "point": {
+                                            "type": "string",
+                                            "example": "POINT(8.12345 53.12345)"
+                                        },
+                                        "route": {
+                                            "type": "string",
+                                            "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))"
+                                        },
+                                        "routevehicle": {
+                                            "type": "string",
+                                            "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))"
+                                        },
+                                        "routepedestrian": {
+                                            "type": "string",
+                                            "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))"
+                                        },
+                                        "lat": {
+                                            "type": "number",
+                                            "example": 0.18
+                                        },
+                                        "lon": {
+                                            "type": "number",
+                                            "example": 0.61
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "ok"
+                                        },
+                                        "sequence": {
+                                            "type": "number",
+                                            "example": 1
+                                        },
+                                        "tolerance": {
+                                            "type": "number",
+                                            "example": 18.3
+                                        },
+                                        "statusinfo": {
+                                            "type": "string",
+                                            "example": "Text status"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "Description #82"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "request":{
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        }
+    },
+    "schemes": [
+        "http"
+    ],
+    "host": "localhost:8080",
+    "basePath": "/"
+}

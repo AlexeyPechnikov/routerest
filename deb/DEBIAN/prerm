@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+
+echo "pm2 stop routerest-server"
+pm2 stop routerest-server || true
+echo "pm2 delete routerest-server"
+pm2 delete routerest-server || true
+echo "service routerest stop"

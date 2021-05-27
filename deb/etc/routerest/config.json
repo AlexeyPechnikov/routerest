@@ -1,0 +1,4 @@
+{
+    "connectionString":"postgresql://routerest:routerest@localhost:5432/routerest",
+    "port": 8080
+}
