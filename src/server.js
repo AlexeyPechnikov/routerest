@@ -40,8 +40,8 @@ db.connect();
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ limit: '1mb', extended: true }));
+app.use(bodyParser.json({limit: '1mb'}));
 
 const swaggerUi = require('swagger-ui-express');
 const schema = require('./swagger.json');  // https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md
