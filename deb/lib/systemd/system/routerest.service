@@ -1,0 +1,12 @@
+[Unit]
+Description=RouteRest Service 
+Documentation=https://github.com/mobigroup/routerest
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/node /usr/share/routerest/server.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
