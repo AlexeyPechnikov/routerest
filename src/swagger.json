@@ -20,7 +20,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
+                            "type": "object",
                             "items": {
                                 "$ref": "#/definitions/response"
                             }
@@ -37,7 +37,7 @@
                         "description": "Route processing",
                         "required": true,
                         "schema": {
-                            "type": "array",
+                            "type": "object",
                             "items": {
                                 "$ref": "#/definitions/request"
                             }
@@ -50,7 +50,6 @@
     "definitions": {
         "request":{
             "required": [
-                "jobid",
                 "options",
                 "addresses"
             ],
@@ -150,204 +149,127 @@
         },
         "response":{
             "required": [
-                "status",
-                "message"
+                "info",
+                "addresses"
             ],
             "properties": {
-                "status": {
-                    "type": "string",
-                    "example": "ok"
+                "info": {
+                    "required": [
+                        "length",
+                        "addresses",
+                        "lengthvehicle",
+                        "lengthpedestrian",
+                        "lengthhouse",
+                        "route",
+                        "routevehicle",
+                        "routepedestrian",
+                        "routehouse"
+                    ],
+                    "properties": {
+                        "length": {
+                            "type": "number",
+                            "example": 1
+                        },
+                        "addresses": {
+                            "type": "number",
+                            "example": 1
+                        },
+                        "lengthvehicle": {
+                            "type": "number",
+                            "example": 1
+                        },
+                        "lengthpedestrian": {
+                            "type": "number",
+                            "example": 1
+                        },
+                        "lengthhouse": {
+                            "type": "number",
+                            "example": 1
+                        },
+                        "route": {
+                            "type": "string",
+                            "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))",
+                            "description": "The entire route geometry"
+                        },
+                        "routevehicle": {
+                            "type": "string",
+                            "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))",
+                            "description": "The route geometries on no-pedestrian roads only"
+                        },
+                        "routepedestrian": {
+                            "type": "string",
+                            "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))",
+                            "description": "The route geometries on pedestrian roads only"
+                        },
+                        "routehouse": {
+                            "type": "string",
+                            "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))",
+                            "description": "The route geometries on house connection segments only"
+                        }
+                    },
+                    "type": "object"
                 },
-                "message": {
-                    "type": "string",
-                    "example": ""
-                },
-                "jobs": {
+                "addresses": {
                     "type": "array",
                     "items": {
                         "type": "object",
+                        "required": [
+                            "lat",
+                            "lon",
+                            "description",
+                            "point",
+                            "route",
+                            "routevehicle",
+                            "routepedestrian",
+                            "sequence",
+                            "tolerance",
+                            "status",
+                            "statusinfo"
+                        ],
                         "properties": {
-                            "info": {
-                                "required": [
-                                    "length",
-                                    "addresses",
-                                    "lengthvehicle",
-                                    "lengthpedestrian",
-                                    "lengthhouse",
-                                    "route",
-                                    "routevehicle",
-                                    "routepedestrian",
-                                    "routehouse"
-                                ],
-                                "properties": {
-                                    "length": {
-                                        "type": "number",
-                                        "example": 1
-                                    },
-                                    "addresses": {
-                                        "type": "number",
-                                        "example": 1
-                                    },
-                                    "lengthvehicle": {
-                                        "type": "number",
-                                        "example": 1
-                                    },
-                                    "lengthpedestrian": {
-                                        "type": "number",
-                                        "example": 1
-                                    },
-                                    "lengthhouse": {
-                                        "type": "number",
-                                        "example": 1
-                                    },
-                                    "route": {
-                                        "type": "string",
-                                        "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))",
-                                        "description": "The entire route geometry"
-                                    },
-                                    "routevehicle": {
-                                        "type": "string",
-                                        "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))",
-                                        "description": "The route geometries on no-pedestrian roads only"
-                                    },
-                                    "routepedestrian": {
-                                        "type": "string",
-                                        "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))",
-                                        "description": "The route geometries on pedestrian roads only"
-                                    },
-                                    "routehouse": {
-                                        "type": "string",
-                                        "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))",
-                                        "description": "The route geometries on house connection segments only"
-                                    }
-                                },
-                                "type": "object"
-                            },
-                            "jobid": {
+                            "point": {
                                 "type": "string",
-                                "example": "f88147d4"
+                                "example": "POINT(8.12345 53.12345)"
                             },
-                            "options": {
-                                "required": [
-                                    "vehicle",
-                                    "endpoint",
-                                    "optimize",
-                                    "roundtrip",
-                                    "startpoint",
-                                    "vehicleprofile",
-                                    "tolerance",
-                                    "debug"
-                                ],
-                                "properties": {
-                                    "vehicle": {
-                                        "type": "string",
-                                        "enum": ["Car", "Car no oneways", "Bike", "Bike no oneways", "Pedestrian"],
-                                        "description": "Copy of the same request field value"
-                                    },
-                                    "endpoint": {
-                                        "type": "boolean",
-                                        "description": "Copy of the same request field value"
-                                    },
-                                    "optimize": {
-                                        "type": "boolean",
-                                        "description": "Copy of the same request field value"
-                                    },
-                                    "roundtrip": {
-                                        "type": "boolean",
-                                        "description": "Copy of the same request field value"
-                                    },
-                                    "startpoint": {
-                                        "type": "boolean",
-                                        "description": "Copy of the same request field value"
-                                    },
-                                    "vehicleprofile": {
-                                        "type": "string",
-                                        "enum": ["Car", "Car no oneways", "Bike", "Bike no oneways", "Pedestrian", "Auto"],
-                                        "description": "Copy of the same request field value"
-                                    },
-                                    "streettypes": {
-                                        "type": "string",
-                                        "description": "Copy of the same request field value"
-                                    },
-                                    "tolerance": {
-                                        "type": "number",
-                                        "description": "Copy of the same request field value"
-                                    },
-                                    "turn_cost": {
-                                        "type": "boolean",
-                                        "description": "Copy of the same request field value"
-                                    },
-                                    "debug": {
-                                        "type": "boolean",
-                                        "description": "Copy of the same request field value"
-                                    }
-                                },
-                                "type": "object"
+                            "route": {
+                                "type": "string",
+                                "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))"
                             },
-                            "addresses": {
-                                "type": "array",
-                                "items": {
-                                    "type": "object",
-                                    "required": [
-                                        "lat",
-                                        "lon",
-                                        "description",
-                                        "point",
-                                        "route",
-                                        "routevehicle",
-                                        "routepedestrian",
-                                        "sequence",
-                                        "tolerance",
-                                        "status",
-                                        "statusinfo"
-                                    ],
-                                    "properties": {
-                                        "point": {
-                                            "type": "string",
-                                            "example": "POINT(8.12345 53.12345)"
-                                        },
-                                        "route": {
-                                            "type": "string",
-                                            "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))"
-                                        },
-                                        "routevehicle": {
-                                            "type": "string",
-                                            "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))"
-                                        },
-                                        "routepedestrian": {
-                                            "type": "string",
-                                            "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))"
-                                        },
-                                        "lat": {
-                                            "type": "number",
-                                            "example": 0.18
-                                        },
-                                        "lon": {
-                                            "type": "number",
-                                            "example": 0.61
-                                        },
-                                        "status": {
-                                            "type": "string",
-                                            "example": "ok"
-                                        },
-                                        "sequence": {
-                                            "type": "number",
-                                            "example": 1
-                                        },
-                                        "tolerance": {
-                                            "type": "number",
-                                            "example": 18.3
-                                        },
-                                        "statusinfo": {
-                                            "type": "string",
-                                            "example": "Text status"
-                                        },
-                                        "description": {
-                                            "type": "string",
-                                            "example": "Description #82"
-                                        }
-                                    }
-                                }
+                            "routevehicle": {
+                                "type": "string",
+                                "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))"
+                            },
+                            "routepedestrian": {
+                                "type": "string",
+                                "example": "MULTILINESTRING((1.23456 12.34567,2.34567 23.45678))"
+                            },
+                            "lat": {
+                                "type": "number",
+                                "example": 0.18
+                            },
+                            "lon": {
+                                "type": "number",
+                                "example": 0.61
+                            },
+                            "status": {
+                                "type": "string",
+                                "example": "ok"
+                            },
+                            "sequence": {
+                                "type": "number",
+                                "example": 1
+                            },
+                            "tolerance": {
+                                "type": "number",
+                                "example": 18.3
+                            },
+                            "statusinfo": {
+                                "type": "string",
+                                "example": "Text status"
+                            },
+                            "description": {
+                                "type": "string",
+                                "example": "Description #82"
                             }
                         }
                     }
