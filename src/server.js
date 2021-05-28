@@ -86,7 +86,7 @@ app.post("/", (req, res)=>{
         })
       .catch(err=>{
         console.log("/get error", err);
-        return res.status(500).send();
+        return res.status(500).send(err.message);
         });
 });
 
