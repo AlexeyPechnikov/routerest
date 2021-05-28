@@ -20,7 +20,10 @@
                     "200": {
                         "description": "OK",
                         "schema": {
+                            "type": "array",
+                            "items": {
                                 "$ref": "#/definitions/response"
+                            }
                         }
                     },
                     "500":{
