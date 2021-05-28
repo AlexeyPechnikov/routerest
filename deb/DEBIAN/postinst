@@ -2,10 +2,6 @@
 
 set -e
 
-echo "Installing PM2 node process manager."
-npm i -g pm2
-pm2 unstartup || true
-pm2 startup
-systemctl enable pm2-root
-pm2 start /usr/share/routerest/server.js -n "routerest-server" || true
-pm2 save || true
+echo "Starting routerest service."
+systemctl enable routerest 
+systemctl start routerest
