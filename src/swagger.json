@@ -20,7 +20,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
+                            "type": "array",
                             "items": {
                                 "$ref": "#/definitions/response"
                             }
@@ -56,15 +56,13 @@
             "properties": {
                 "jobid": {
                     "type": "string",
-                    "description": "Unique job identifier"
+                    "description": "Job identifier"
                 },
                 "options": {
                     "required": [
                         "vehicle",
-                        "endpoint",
                         "optimize",
-                        "roundtrip",
-                        "startpoint",
+                        "trip",
                         "vehicleprofile",
                         "tolerance",
                         "debug"
@@ -76,21 +74,15 @@
                             "example": "Car",
                             "description": "Define route vehicle type. Car routing can't use pedestrian roads and pedestrian route can't use highways"
                         },
-                        "endpoint": {
-                            "type": "boolean",
-                            "description": "Use True to set the last address as end route point"
-                        },
                         "optimize": {
                             "type": "boolean",
                             "description": "Use True to reorder the addresses and False to save the order"
                         },
-                        "roundtrip": {
-                            "type": "boolean",
+                        "trip": {
+                            "type": "string",
+                            "enum": ["Start", "Stop", "Round", "Split"],
+                            "example": "Split",
                             "description": "Use True for roundrip route and False otherwise"
-                        },
-                        "startpoint": {
-                            "type": "boolean",
-                            "description": "Use True to set the first address as start route point"
                         },
                         "vehicleprofile": {
                             "type": "string",
