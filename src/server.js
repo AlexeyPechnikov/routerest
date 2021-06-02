@@ -95,7 +95,7 @@ let srv = app.listen(config.port, function() {
 });
 
 // 10 minutes
-srv.timeout=10*60*1000;
+srv.setTimeout(600000);
 
 function stop() {
   db.$pool.end();
